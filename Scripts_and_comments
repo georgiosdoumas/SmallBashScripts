@@ -1,0 +1,23 @@
+In Jang book 
+The strings command can be used to identify those daemons protected by TCP
+Wrappers. It does so by listing the strings associated with various components of
+binary files. The string associated with TCP Wrappers is hosts_access. Daemons can
+be found in the /sbin and /usr/sbin directories. Thus, the quickest way to scan the
+daemons in these directories for the host_access string is with the following commands:
+# strings /sbin/* | grep hosts_access
+# strings /usr/sbin/* | grep hosts_access
+The output depends on installed packages. 
+So I wanted to have a way to know what is the name of the package also.
+Solution :
+#!/bin/bash
+for pckgname in /sbin/* /usr/sbin/* 
+do
+  strings $pckgname | grep hosts_access 
+  controlval=$?  #if there was a match with pattern "hosts_access" , it will have a 0 value
+  if [ "$controlval" == "0" ]
+  then
+    echo $pckgname  #these are the packages that have the string hosts_access somewhere
+  fi
+done
+
+  
