@@ -10,13 +10,16 @@ The output depends on installed packages.
 So I wanted to have a way to know what is the name of the package also.
 Solution :
 #!/bin/bash
+STRING=hosts_access
 for pckgname in /sbin/* /usr/sbin/* 
 do
-  strings $pckgname | grep hosts_access 
-  controlval=$?  #if there was a match with pattern "hosts_access" , it will have a 0 value
+  strings $pckgname | grep $STRING 
+  controlval=$?  #if there was a match with pattern "hosts_access" , controlval will have a 0 value
   if [ "$controlval" == "0" ]
   then
-    echo $pckgname  #these are the packages that have the string hosts_access somewhere
+    echo "$pckgname has the string $STRING "  #these are the packages that have the string hosts_access somewhere
+    echo " ... and has the following ibrary dependencies : "
+    ldd $pckgname
   fi
 done
 
